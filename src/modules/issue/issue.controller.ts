@@ -46,8 +46,8 @@ const updateIssue  = async (req: Request, res: Response) => {
     try {
         const {title, description, type} = req.body
         const { id } = req.params as { id: string }
-        
-        const result = await issueService.updateIssueInDB({title, description, type, id})
+        const user = req.user        
+        const result = await issueService.updateIssueInDB({title, description, type, id},user)
 
         sendResponse(res,200, {success: true, message: "Issue updated successfully", data: result})
     } catch (error: any) {
