@@ -42,8 +42,36 @@ const getSingleIssues = async (req: Request, res: Response) => {
         sendResponse(res, 500,{success:false, message: "Issue not Found"})
     }
 }
+const updateIssue  = async (req: Request, res: Response) => {
+    try {
+        const {title, description, type} = req.body
+        const { id } = req.params as { id: string }
+        
+        const result = await issueService.updateIssueInDB({title, description, type, id})
+
+        sendResponse(res,200, {success: true, message: "Issue updated successfully", data: result})
+    } catch (error: any) {
+        sendResponse(res,500,{success:false, message: error.message})
+    }
+}
+const deleteIssue = async (req: Request, res: Response) => {
+    try {
+        const  user = req.user
+        
+        const id= req.params.id as string
+        if (user.role !== "maintainer") {
+            throw new Error("Maintainer only Delete Issue")
+        }
+        const result = await issueService.deleteIssueFromDB(id)
+        sendResponse(res,200, {success: true , message: "Issue deleted successfully"})
+    } catch (error: any) {
+        sendResponse(res,500,{success:false,message:error.message})
+    }
+}
 export const issueController = {
     createIssue,
     getAllIssues,
-    getSingleIssues
+    getSingleIssues,
+    deleteIssue,
+    updateIssue
 }
