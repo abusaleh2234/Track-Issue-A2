@@ -46,25 +46,46 @@ const getAllIssuesFromDB = async (search: string) => {
     console.log(dataWithReporter);
     
     return dataWithReporter
-    // if (searchSort === undefined) {
-    //     result = await pool.query(`
-    //     SELECT id, title, description, type, status, created_at, updated_at FROM issues
-    //     `)
-    // } else if (searchSort === "newest") {
-    //     result = await pool.query(`
-    //     SELECT id, title, description, type, status, SELECT (id, name, role) FROM users, created_at, updated_at FROM issues
-    //     ORDER BY created_at DESC
-    // `)
-    // } else if (searchSort === "oldest") {
-    //     result = await pool.query(`
-    //     SELECT id, title, description, type, status, created_at, updated_at FROM issues
-    //     ORDER BY created_at ASC
-    // `)
-    // }
 }
+const getSingleIssueFromDB = async (id: string) => {
 
+    const issueResult = await pool.query(`
+        SELECT * FROM issues WHERE id = $1
+    `, [id])
+
+    const issue = issueResult.rows[0]
+        // console.log(issue);
+        
+    if (!issue) {
+        return null
+    }
+
+    const reporterResult = await pool.query(`
+        SELECT id, name, role 
+        FROM users 
+        WHERE id = $1
+    `, [issue.reporter_id])
+        // console.log(reporterResult.rows);
+        
+    const result = {
+        id: issue.id,
+        title: issue.title,
+        description: issue.description,
+        type: issue.type,
+        status: issue.status,
+
+        reporter: reporterResult.rows[0] || null,
+
+        created_at: issue.created_at,
+        updated_at: issue.updated_at
+    }
+    console.log(result);
+    
+    return result
+}
 
 export const issueService = {
     createIssueIntoDb,
-    getAllIssuesFromDB
+    getAllIssuesFromDB,
+    getSingleIssueFromDB
 }

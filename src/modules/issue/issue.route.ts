@@ -5,4 +5,5 @@ const issueRouter = Router()
 
 issueRouter.post("/",userAuth, issueController.createIssue)
 issueRouter.get("/",issueController.getAllIssues)
+issueRouter.get("/:id",issueController.getSingleIssues)
 export default issueRouter
