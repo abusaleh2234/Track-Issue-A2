@@ -33,7 +33,7 @@ export const initDB = async () => {
 
             created_at TIMESTAMP DEFAULT NOW(),
             updated_at TIMESTAMP DEFAULT NOW()
-            CHECK (LENGTH(name) >= 20)
+            CHECK (LENGTH(description) >= 20)
             )
             `)
 
