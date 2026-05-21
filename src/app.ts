@@ -1,4 +1,4 @@
-import express from "express"
+import express, { NextFunction, Request, Response } from "express"
 import authRouter from "./modules/user/user.route"
 import issueRouter from "./modules/issue/issue.route"
 
@@ -15,5 +15,14 @@ app.get("/", (req,res) => {
 
 app.use("/api/auth",authRouter)
 app.use("/api/issues", issueRouter)
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error(err.stack); // Log the error
+
+  res.status(500).json({
+    success: false,
+    message: err.message || "Internal Server Error",
+  });
+});
 
 export default app

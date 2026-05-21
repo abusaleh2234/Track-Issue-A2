@@ -1,7 +1,8 @@
 import { Router } from "express"
 import { issueController } from "./issue.controller"
+import { userAuth } from "../../middleware/auth"
 const issueRouter = Router()
 
-issueRouter.post("/", issueController.createIssue)
+issueRouter.post("/",userAuth, issueController.createIssue)
 
 export default issueRouter
