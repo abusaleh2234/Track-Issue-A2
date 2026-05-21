@@ -10,9 +10,9 @@ const createIssue = async (req: Request, res: Response) => {
     // console.log(req.body);
 
     try {
-        const {title, description,type} = req.body
-        const {id } = req.user
-        const result = await issueService.createIssueIntoDb({title, description,type,id})
+        const { title, description, type } = req.body
+        const { id } = req.user
+        const result = await issueService.createIssueIntoDb({ title, description, type, id })
         const issue = result.rows[0]
         // console.log(result);
         // console.log(token);
@@ -23,7 +23,17 @@ const createIssue = async (req: Request, res: Response) => {
     }
 
 }
+const getAllIssues = async (req: Request, res: Response) => {
+    try {
+        const sort = req.query.sort as string
+        const result = await issueService.getAllIssuesFromDB(sort)
+        sendResponse(res, 200, { success: true, message: "Issues retrieved successfully", data: result })
+    } catch (error) {
+        sendResponse(res, 500, { success: false, message: "Issues not Found" })
+    }
+}
 
 export const issueController = {
-    createIssue
+    createIssue,
+    getAllIssues
 }

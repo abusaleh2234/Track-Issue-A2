@@ -35,24 +35,24 @@ const userLoginIntoDB = async (payLoad: { email: string, password: string }) => 
     }
 
     // token
-    const jwtPayLoad= {
+    const jwtPayLoad = {
         id: user.id,
         name: user.name,
         email: user.email,
         role: user.role
     }
-    const accessToken = jwt.sign(jwtPayLoad, config.accessSecret,{expiresIn: "1d"})
-    return {accessToken,user}
+    const accessToken = jwt.sign(jwtPayLoad, config.accessSecret, { expiresIn: "1d" })
+    return { accessToken, user }
 }
 
 const getUserById = async (userId: string) => {
     const result = await pool.query(`
-      SELECT id, name, email, role
-      FROM users
-      WHERE id($1)
-    `,[userId]);
+    SELECT id, name, email, role
+    FROM users
+    WHERE id = $1
+`, [userId]);
     return result.rows[0];
-  }
+}
 export const userService = {
     createUser,
     userLoginIntoDB,
