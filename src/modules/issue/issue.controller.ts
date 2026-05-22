@@ -61,6 +61,7 @@ const deleteIssue = async (req: Request, res: Response) => {
         const id= req.params.id as string
         if (user.role !== "maintainer") {
             throw new Error("Maintainer only Delete Issue")
+            return 
         }
         const result = await issueService.deleteIssueFromDB(id)
         sendResponse(res,200, {success: true , message: "Issue deleted successfully"})

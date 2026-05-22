@@ -41,8 +41,8 @@ const userLoginIntoDB = async (payLoad: { email: string, password: string }) => 
         email: user.email,
         role: user.role
     }
-    const accessToken = jwt.sign(jwtPayLoad, config.accessSecret, { expiresIn: "1d" })
-    return { accessToken, user }
+    const token = jwt.sign(jwtPayLoad, config.accessSecret, { expiresIn: "1d" })
+    return { token, user }
 }
 
 const getUserById = async (userId: string) => {
