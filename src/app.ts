@@ -1,10 +1,12 @@
 import express, { NextFunction, Request, Response } from "express"
 import authRouter from "./modules/user/user.route"
 import issueRouter from "./modules/issue/issue.route"
-
+import cookieParser from "cookie-parser"
 const app = express()
 
+
 app.use(express.json())
+app.use(cookieParser())
 
 app.get("/", (req,res) => {
     res.status(200).json({

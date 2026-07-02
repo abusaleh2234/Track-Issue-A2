@@ -18,10 +18,15 @@ const userRegister = async (req: Request, res: Response)=>{
 const userLogin = async (req: Request, res: Response) => {
     try {
         const result =await userService.userLoginIntoDB(req.body)
-        
+        res.cookie("accessToken", result.token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "none",
+        maxAge: 1000  * 60 * 60 * 24
+    })
         sendResponse(res,200,{success:true, message: "Login successful", data: result})
     } catch (error: any) {
-        sendResponse(res,500,{success: false,message:error.message, errors: error})
+        sendResponse(res,500,{success: false, message:error.message, errors: error})
     }
 }
 export  const userController = {

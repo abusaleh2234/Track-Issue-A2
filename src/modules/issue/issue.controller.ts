@@ -10,6 +10,8 @@ const createIssue = async (req: Request, res: Response) => {
     // console.log(req.body);
 
     try {
+        // console.log(req.body);
+        
         const { title, description, type } = req.body
         const { id } = req.user
         const result = await issueService.createIssueIntoDb({ title, description, type, id })
@@ -19,6 +21,8 @@ const createIssue = async (req: Request, res: Response) => {
 
         sendResponse(res, 201, { success: true, message: "Issue created successfully", data: issue })
     } catch (error: any) {
+        console.log("message:", error.message);
+        
         sendResponse(res, 500, { success: false, message: error.message, errors: error })
     }
 

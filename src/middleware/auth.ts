@@ -4,14 +4,18 @@ import { tokenVerify } from "../utils/tokenVerify";
 import { userService } from "../modules/user/user.service";
 
 export const userAuth = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const token = req.headers.authorization
+    try {        
+        const token = req.cookies.accessToken
+        // console.log(token);
+        
         if (!token) {
-            sendResponse(res, 401, { success: false, message: "Unauthorized" })
+            sendResponse(res, 401, { success: false, message: "Unauthorized"})
         }
         const payLoad = tokenVerify(token as string)
+        // console.log(payLoad, "as a err");
         
         if (!payLoad) {
+            // throw Error("Invalid access token ssss")
             sendResponse(res, 401, { success: false, message: "Invalid access token" })
         }
         const user = await userService.getUserById(payLoad.id)
