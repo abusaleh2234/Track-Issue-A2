@@ -9,19 +9,21 @@ export const userAuth = async (req: Request, res: Response, next: NextFunction) 
         // console.log(token);
         
         if (!token) {
-            sendResponse(res, 401, { success: false, message: "Unauthorized"})
+            throw new Error("Unauthorized")
+            // sendResponse(res, 401, { success: false, message: "Unauthorized",errors: ""})
         }
         const payLoad = tokenVerify(token as string)
         // console.log(payLoad, "as a err");
         
         if (!payLoad) {
-            // throw Error("Invalid access token ssss")
-            sendResponse(res, 401, { success: false, message: "Invalid access token" })
+            throw new Error("Invalid access token")
+            // sendResponse(res, 401, { success: false, message: "Invalid access token" })
         }
         const user = await userService.getUserById(payLoad.id)
 
         if (!user) {
-            return sendResponse(res, 404, { success: false, message: "User not found" });
+            throw new Error("User not found")
+            // return sendResponse(res, 404, { success: false, message: "User not found" });
         }
 
         req.user = user;
